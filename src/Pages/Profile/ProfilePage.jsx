@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./ProfilePage.module.css";
 import { Menu } from "react-feather";
 import profilePic from "../../assets/logo.png";
 import Input from "../../Components/Input/Input";
+import makeApiCall from "../../utils/Helper";
+import Button from "../../Components/Button/Button";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfilePage() {
+    const navigate = useNavigate();
     const [profileImage, setProfileImage] = useState(profilePic);
     const [personalInfo, setPersonalInfo] = useState({
         fullName: '',
         email: '',
-        phoneNumber: ''
+        phone: ''
     });
     const [passwordInfo, setPasswordInfo] = useState({
         oldPassword: '',
@@ -33,6 +37,13 @@ export default function ProfilePage() {
         }));
     };
 
+    const getProfile = async () => {
+        const response = await makeApiCall({
+            path: "/api/v1/admin/getProfile",
+            method: "GET"
+        })
+    }
+
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -44,38 +55,46 @@ export default function ProfilePage() {
         }
     };
 
-    const handleSaveChanges = () => {
+    const handleSaveChanges = async () => {
         if (passwordInfo.newPassword !== passwordInfo.confirmNewPassword) {
             alert("New passwords do not match!");
             return;
         }
 
-        const profileData = {
-            ...personalInfo,
-            profileImage,
-            passwordChange: {
-                oldPassword: passwordInfo.oldPassword,
-                newPassword: passwordInfo.newPassword
-            }
-        };
-
-        console.log('Profile Update Data:', profileData);
+        const passPayload = {
+            newPassword: passwordInfo.newPassword,
+            confirmPassword: passwordInfo.confirmNewPassword
+        }
+        const response = await makeApiCall({
+            path: "/api/v1/admin/updatePassword",
+            method: "POST",
+            payload: passPayload
+        })
     };
+
+    useEffect(() => {
+        getProfile();
+    }, [])
 
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <Menu />
-                <h2>Profile</h2>
+                <div className="flex gap-2">
+                    <Menu />
+                    <h2>Profile</h2>
+                </div>
+                <div className="w-fit">
+                    <Button onClick={() => navigate("/updateProfile")}>Edit Profile</Button>
+                </div>
             </div>
 
             <div className={styles.profileCard}>
                 <div className={styles.profileImageSection}>
                     <img src={profileImage} alt="Profile" className={styles.profileImage} />
-                    <input 
-                        type="file" 
-                        accept="image/*" 
-                        style={{ display: 'none' }} 
+                    <input
+                        type="file"
+                        accept="image/*"
+                        style={{ display: 'none' }}
                         id="imageUpload"
                         onChange={handleImageUpload}
                     />
@@ -86,61 +105,61 @@ export default function ProfilePage() {
 
                 <div className={styles.section}>
                     <h3>Personal Information:</h3>
-                    <Input 
-                        label="Full Name" 
-                        type="text" 
+                    <Input
+                        label="Full Name"
+                        type="text"
                         name="fullName"
-                        placeholder="Enter your name" 
+                        placeholder="Enter your name"
                         value={personalInfo.fullName}
                         onChange={handlePersonalInfoChange}
                     />
-                    <Input 
-                        label="Email Address" 
-                        type="email" 
+                    <Input
+                        label="Email Address"
+                        type="email"
                         name="email"
-                        placeholder="Enter your email" 
+                        placeholder="Enter your email"
                         value={personalInfo.email}
                         onChange={handlePersonalInfoChange}
                     />
-                    <Input 
-                        label="Phone Number" 
-                        type="tel" 
-                        name="phoneNumber"
-                        placeholder="Enter your number" 
-                        value={personalInfo.phoneNumber}
+                    <Input
+                        label="Phone Number"
+                        type="tel"
+                        name="phone"
+                        placeholder="Enter your number"
+                        value={personalInfo.phone}
                         onChange={handlePersonalInfoChange}
                     />
                 </div>
 
                 <div className={styles.section}>
                     <h3>Password Management:</h3>
-                    <Input 
-                        label="Old Password" 
-                        type="password" 
+                    <Input
+                        label="Old Password"
+                        type="password"
                         name="oldPassword"
-                        placeholder="Enter old password" 
+                        placeholder="Enter old password"
                         value={passwordInfo.oldPassword}
                         onChange={handlePasswordChange}
                     />
-                    <Input 
-                        label="New Password" 
-                        type="password" 
+                    <Input
+                        label="New Password"
+                        type="password"
                         name="newPassword"
-                        placeholder="Enter new password" 
+                        placeholder="Enter new password"
                         value={passwordInfo.newPassword}
                         onChange={handlePasswordChange}
                     />
-                    <Input 
-                        label="Confirm New Password" 
-                        type="password" 
+                    <Input
+                        label="Confirm New Password"
+                        type="password"
                         name="confirmNewPassword"
-                        placeholder="Confirm new password" 
+                        placeholder="Confirm new password"
                         value={passwordInfo.confirmNewPassword}
                         onChange={handlePasswordChange}
                     />
                 </div>
 
-                <button 
+                <button
                     className={styles.saveButton}
                     onClick={handleSaveChanges}
                 >

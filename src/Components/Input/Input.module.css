@@ -1,0 +1,55 @@
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.inputLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.inputWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.input:focus {
+  border-color: #5b99a1;
+}
+
+.eyeIcon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #555;
+  transition: color 0.3s ease;
+}
+
+.eyeIcon:hover {
+  color: #333;
+}
+
+.forgotPassword {
+  font-size: 14px;
+  color: #888;
+  text-decoration: none;
+  cursor: pointer;
+  margin-top: 10px;
+  text-align: center;
+}
+

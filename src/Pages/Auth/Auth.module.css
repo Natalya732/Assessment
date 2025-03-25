@@ -1,0 +1,60 @@
+.authContainer {
+    width: 80%;
+    height: 700px;
+    background: #A5A5A538;
+    border-radius: 10px;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid #A5A5A538;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logoContainer {
+    flex: 1;
+}
+
+.line {
+    position: relative;
+    height: 100%;
+    width: 3px;
+    background-color: #E25845;
+    display: flex;
+    align-items: center;
+}
+
+.line::before,
+.line::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #E25845;
+    border-radius: 50%;
+}
+
+.line::before {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.line::after {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.authFormContainer {
+    flex: 1;
+    padding: 24px;
+}
+
+.authForm {
+    height: 600px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    padding: 24px;
+}

@@ -4,10 +4,14 @@ import logo from "../../assets/logo.png";
 import Card from "../../Components/Card/Card";
 import Input from "../../Components/Input/Input";
 import Button from "../../Components/Button/Button";
+import { toast } from "react-toastify";
+import makeApiCall from "../../utils/Helper";
+import Loader from "../../Components/Loader/Loader";
+import { useNavigate } from "react-router-dom";
 
 function LoginCard({ onCreateAccountClick, onLogin }) {
     const [loginData, setLoginData] = useState({
-        username: '',
+        email: '',
         password: ''
     });
 
@@ -26,11 +30,11 @@ function LoginCard({ onCreateAccountClick, onLogin }) {
     return (
         <Card title="Login Page" description="Welcome to the free shops App Controller">
             <Input
-                label="Username"
-                type="text"
-                name="username"
-                placeholder="Enter your username"
-                value={loginData.username}
+                label="Email"
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                value={loginData.email}
                 onChange={handleInputChange}
             />
             <Input
@@ -73,7 +77,7 @@ function CreateNewAccountCard({ onLoginClick, onRegister }) {
 
     const handleRegister = () => {
         if (registerData.password !== registerData.confirmPassword) {
-            alert("Passwords do not match!");
+            toast.error("Passwords do not match!");
             return;
         }
         onRegister(registerData);
@@ -135,17 +139,39 @@ function CreateNewAccountCard({ onLoginClick, onRegister }) {
 }
 
 export default function Auth() {
+    const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const handleLogin = (loginData) => {
-        console.log('Login Data:', loginData);
+    const handleLogin = async (loginData) => {
+        setLoading(true);
+        const response = await makeApiCall({
+            path: "/api/v1/admin/login",
+            payload: loginData,
+            method: "POST"
+        });
+        setLoading(false);
+        if (!response) return;
+        toast.success("Logged In successfully");
+        navigate("/profile");
+        console.log("response", response)
+        setIsLogin(true);
     };
 
-    const handleRegister = (registerData) => {
-        console.log('Register Data:', registerData);
+    const handleRegister = async (registerData) => {
+        setLoading(true);
+        const response = await makeApiCall({
+            path: "/api/v1/admin/registration",
+            payload: registerData,
+            method: "POST"
+        });
+        setLoading(false);
+        if (!response) return;
+        toast.success("Account created successfully");
+        setIsLogin(true);
     };
 
-    return (
+    return loading ? <Loader /> : (
         <div className={styles.authContainer}>
             <div className={styles.logoContainer}>
                 <img src={logo} alt="logo" />

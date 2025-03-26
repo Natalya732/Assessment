@@ -28,7 +28,7 @@ function LoginCard({ onCreateAccountClick, onLogin }) {
     };
 
     return (
-        <Card title="Login Page" description="Welcome to the free shops App Controller">
+        <Card title="Log in" description="Welcome to the free shops App Controller">
             <Input
                 label="Email"
                 type="email"
@@ -45,11 +45,11 @@ function LoginCard({ onCreateAccountClick, onLogin }) {
                 value={loginData.password}
                 onChange={handleInputChange}
             />
-            <div className="w-fit self-center">
+            <div className="w-fit self-center" style={{ marginTop: "20px" }}>
                 <Button onClick={handleLogin}>Log In</Button>
             </div>
             <div
-                className="text-blue-500 self-center mt-6 cursor-pointer"
+                className={`${styles.buttonLink}`}
                 onClick={onCreateAccountClick}
             >
                 Create New Account
@@ -125,11 +125,11 @@ function CreateNewAccountCard({ onLoginClick, onRegister }) {
                 value={registerData.confirmPassword}
                 onChange={handleInputChange}
             />
-            <div className="w-fit self-center">
+            <div className="w-fit self-center" style={{ marginTop: "20px" }}>
                 <Button onClick={handleRegister}>Create Account</Button>
             </div>
             <div
-                className="text-blue-500 self-center mt-6 cursor-pointer"
+                className={`${styles.buttonLink}`}
                 onClick={onLoginClick}
             >
                 Already have an account?
